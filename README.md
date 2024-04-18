@@ -4,6 +4,13 @@ Repositorio dedicado al proyecto de la asignatura de Procesamiento del Lenguaje 
 PROYECTO:
 **Clasificación de barrios en función de su tipología (alternativo, de lujo, multicultural, etc).**
 
+*INTEGRANTES*:
+• Carlos Sánchez Polo
+• Jesús Martínez Leal
+• Pablo Vicente Martínez
+• Samuel Ortega Mediavilla
+• Isaac Martí García
+
 REQUISITOS:
 El tema central del proyecto será relativo a la compraventa y alquiler
 de la vivienda en la ciudad de Valencia.
