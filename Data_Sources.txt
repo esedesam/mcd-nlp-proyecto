@@ -1,6 +1,11 @@
-- https://www.valencia.es/cas/estadistica/mapa-barrios  ---> WebScrapping información barrios
+====================== DATOS INICIO DE BARRIOS ======================
 
--https://valencia.opendatasoft.com/explore/?disjunctive.features&disjunctive.modified&disjunctive.publisher&disjunctive.keyword&disjunctive.theme&disjunctive.language&sort=modified&q=barrios --> Más Datos Abiertos acerca de Barrios en Valencia
+- https://www.valencia.es/cas/estadistica/mapa-barrios  ---> WebScrapping información barrios
+- https://www.valencia.es/estadistica/inf_dtba/{año}/Barrios{año}.zip --> Enlace directo para datos de Barrios {año} se sustituye por el año en cuestión
+
+====================== MÁS DATOS DE BARIOS ======================
+
+- https://valencia.opendatasoft.com/explore/?disjunctive.features&disjunctive.modified&disjunctive.publisher&disjunctive.keyword&disjunctive.theme&disjunctive.language&sort=modified&q=barrios 
 
 
 - https://valencia.opendatasoft.com/explore/dataset/barris-barrios/information/ --> información geográfica barrios - licencia CreativeCommons 4.0
