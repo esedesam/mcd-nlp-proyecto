@@ -31,3 +31,14 @@ Variables más importantes para dataset `Barris` en nuestro objetivo:
 ==== Elecciones ====
 
 - Vots a candidatures a les Eleccions Generals 2023 -> voy a tener que hacer una búsqueda parcial.
+
+
+
+Idea: Voy a confiar inicialmente en que está más o menos bien en cuestión de estructura todo.
+
+Pasos:
+
+- Buscar palabras claves de tabla en cuestión
+- Bajar filas que correspondan.
+- Segmentar la tabla identificando los límites.
+- Cambios manuales hacerlos después que tenga todo.
