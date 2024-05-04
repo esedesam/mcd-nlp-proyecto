@@ -21,6 +21,7 @@ def normalizeDoc(nlp, doc, nMinCharacters = 4):
 
 def obtainSimilarity(doc, docIndex: list[str], vectorizerDict: dict[str]):
     """
+    Obtiene la matriz de similitud calculada como la distancia coseno empleando los vectorizadores proporcionados.
     """
     similarityDict = {}
     for tag, vectorizer in vectorizerDict.items():
@@ -79,7 +80,8 @@ descriptions = [normalizeDoc(nlp, doc) for doc in corpus]
 descriptionIndex = list(df['Zona'].values)
 
 # Obtener similitud entre barrios
-similarityDict = obtainSimilarity(descriptions, descriptionIndex, {'BoW': CountVectorizer(), 'TF-IDF': TfidfVectorizer()})
+models = {'BoW': CountVectorizer(), 'TF-IDF': TfidfVectorizer(), 'TF-IDF N-gram(1,3)': TfidfVectorizer(ngram_range = (1, 3))}
+similarityDict = obtainSimilarity(descriptions, descriptionIndex, models)
 mostSimilarDf = findMostSimilar(similarityDict, descriptionIndex)
 print(mostSimilarDf)
 
@@ -88,9 +90,10 @@ with open('data/tipologyDescription.json', 'r', encoding = 'utf-8') as f:
     tipology: dict = json.load(f)
 
 classes = list(tipology.keys())
-descriptions.extend(list(tipology.values()))
-descriptionIndex.extend(classes)
+classDescriptions = [normalizeDoc(nlp, doc) for doc in list(tipology.values())]
+descriptionsAndClasses = descriptions + classDescriptions
+descriptionAndClassesIndex = descriptionIndex + classes
 
-similarityDict = obtainSimilarity(descriptions, descriptionIndex, {'BoW': CountVectorizer(), 'TF-IDF': TfidfVectorizer()})
-mostSimilarDf = findMostSimilar(similarityDict, descriptionIndex, 2, classes)
+similarityDict = obtainSimilarity(descriptionsAndClasses, descriptionAndClassesIndex, models)
+mostSimilarDf = findMostSimilar(similarityDict, descriptionAndClassesIndex, 2, classes)
 print(mostSimilarDf)
