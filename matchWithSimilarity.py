@@ -1,9 +1,13 @@
+import numpy as np
 import pandas as pd
+import matplotlib.pyplot as plt
+import matplotlib.colors as mcolors
 import spacy
 import re
 import json
 from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
+from sklearn.manifold import TSNE
 
 def normalizeDoc(nlp, doc, nMinCharacters = 4):
     """
@@ -97,3 +101,40 @@ descriptionAndClassesIndex = descriptionIndex + classes
 similarityDict = obtainSimilarity(descriptionsAndClasses, descriptionAndClassesIndex, models)
 mostSimilarDf = findMostSimilar(similarityDict, descriptionAndClassesIndex, 2, classes)
 print(mostSimilarDf)
+
+# Obtener representación vectorial de lexemas y las palabras de los textos
+words = []
+for s in descriptions:
+    word_list = s.split()
+    words.extend(word_list)
+lexemas = [nlp.vocab[orth] for orth in nlp.vocab.vectors]
+wordsForTsne = [t.text for t in np.random.choice(lexemas, 10000, replace = False)] + words
+wordVectors = np.array([nlp(word).vector for word in wordsForTsne])
+
+# Obtener embedding a partir de los vectores
+tsne = TSNE(n_components = 2, random_state = 0, n_iter = 250, perplexity = 50, init = 'random', learning_rate = 'auto')
+np.set_printoptions(suppress = True)
+T = tsne.fit_transform(wordVectors)
+
+# Representar lexemas
+fig, ax = plt.subplots(figsize = (14, 8))
+ax.scatter(T[:len(words), 0], T[:len(words), 1], c = 'steelblue', alpha = 0.1)
+
+# Representar palabras con color por barrio
+cmap = plt.get_cmap('viridis', len(descriptionIndex))
+
+auxIdx = len(words)
+for i, description in enumerate(descriptions):
+    # Filtrar por barrio
+    nWords = len([word for word in description.split() if word])
+    TFiltered = T[auxIdx:(auxIdx+nWords), :]
+    auxIdx += nWords
+
+    ax.plot(TFiltered[:, 0], TFiltered[:, 1], '.', c = cmap(i / len(descriptionIndex)))
+
+# Añadir la leyenda de colores
+colorTags = [(tag, cmap(i / len(descriptionIndex))) for i, tag in enumerate(descriptionIndex)]
+colorLegend = [plt.Line2D([0], [0], marker = 'o', c = mcolors.to_rgb(color), label = tag) for tag, color in colorTags]
+ax.legend(handles = colorLegend, loc = 'best')
+
+plt.show()
