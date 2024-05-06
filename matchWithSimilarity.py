@@ -108,7 +108,8 @@ for s in descriptions:
     word_list = s.split()
     words.extend(word_list)
 lexemas = [nlp.vocab[orth] for orth in nlp.vocab.vectors]
-wordsForTsne = [t.text for t in np.random.choice(lexemas, 10000, replace = False)] + words
+lexemasRand = [t.text for t in np.random.choice(lexemas, 10000, replace = False)]
+wordsForTsne = lexemasRand + words + classes
 wordVectors = np.array([nlp(word).vector for word in wordsForTsne])
 
 # Obtener embedding a partir de los vectores
@@ -118,12 +119,12 @@ T = tsne.fit_transform(wordVectors)
 
 # Representar lexemas
 fig, ax = plt.subplots(figsize = (14, 8))
-ax.scatter(T[:len(words), 0], T[:len(words), 1], c = 'steelblue', alpha = 0.1)
+ax.scatter(T[:len(lexemasRand), 0], T[:len(lexemasRand), 1], c = 'steelblue', alpha = 0.1)
 
 # Representar palabras con color por barrio
 cmap = plt.get_cmap('viridis', len(descriptionIndex))
 
-auxIdx = len(words)
+auxIdx = len(lexemasRand)
 for i, description in enumerate(descriptions):
     # Filtrar por barrio
     nWords = len([word for word in description.split() if word])
@@ -136,5 +137,12 @@ for i, description in enumerate(descriptions):
 colorTags = [(tag, cmap(i / len(descriptionIndex))) for i, tag in enumerate(descriptionIndex)]
 colorLegend = [plt.Line2D([0], [0], marker = 'o', c = mcolors.to_rgb(color), label = tag) for tag, color in colorTags]
 ax.legend(handles = colorLegend, loc = 'best')
+
+# Representar clases
+auxIdx = len(lexemasRand) + len(words)
+ax.plot(T[auxIdx:, 0], T[auxIdx:, 1], 'x', c = 'red')
+
+for label, x, y in zip(classes, T[auxIdx:, 0], T[auxIdx:, 1]):
+    ax.annotate(label, xy = (x, y), xytext = (0, 0), textcoords = 'offset points')
 
 plt.show()
