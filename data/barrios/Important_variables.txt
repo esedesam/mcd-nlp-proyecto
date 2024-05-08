@@ -1,0 +1,44 @@
+Variables más importantes para dataset `Barris` en nuestro objetivo:
+
+====== PADRÓN ==== 
+- Superficie y densitat de població
+- Població por sexe i edat (grups de 5 anys)
+- Població segons lloc de naixement i sexe
+- Població estrangera segons nacionalitat, per continents
+- Nombre de fulls familiars segons composició
+- Indicadores demogràfics del barri (importante)
+
+
+==== MovPadrón ====
+
+- Resum de moviments registrats al Padró Municipal
+- Indicadors demogràfics
+
+===== Vehículos ====
+
+- Vehicles segons tipus
+- Turismes segons potència
+
+
+===== Catastro =====
+
+- Béns Immobles segons any d'antiguitat
+- Béns Immobles construïts després de 1800 segons superfície construïda
+- Béns Immobles construïts després de 1800 segons valor cadastral (en milers d'euros)
+- Valors cadastral mitjans (sól, construcció i total) per als béns immobles posteriors a 1800
+- Superfície total dels aparcaments i superfície per béns immobles i turisme
+
+==== Elecciones ====
+
+- Vots a candidatures a les Eleccions Generals 2023 -> voy a tener que hacer una búsqueda parcial.
+
+
+
+Idea: Voy a confiar inicialmente en que está más o menos bien en cuestión de estructura todo.
+
+Pasos:
+
+- Buscar palabras claves de tabla en cuestión
+- Bajar filas que correspondan.
+- Segmentar la tabla identificando los límites.
+- Cambios manuales hacerlos después que tenga todo.
