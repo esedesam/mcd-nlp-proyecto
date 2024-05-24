@@ -1,10 +1,11 @@
 import folium
 import json
 import folium.plugins
-from folium.features import DivIcon
+from folium.features import CustomIcon
 import numpy as np
 import pandas as pd
 from branca.colormap import linear
+import base64
 
 # Load Barrios GeoJSON (https://valencia.opendatasoft.com/explore/dataset/barris-barrios/export/)
 with open('data/barris-barrios.geojson') as f:
@@ -20,12 +21,16 @@ with open('data/colorMappingBarrios.json') as f:
 with open('data/colorMappingDistritos.json') as f:
     colorMappingDistritos = json.load(f)
 
+# Load Icon Mappings
+with open('icons/classIcons.json', encoding = 'utf-8') as f:
+    iconMapper = json.load(f)
+
 # Load Data to Show
 dataDf = pd.read_csv('data/dummyData.csv', sep = ',')
 barrioColName = 'barrio'
 dataVarName = dataDf.columns[dataDf.columns != barrioColName]
 
-distritosTC = pd.read_csv('data/distritosClasificacion.csv', sep = ';', index_col = 0)
+distritosTC = pd.read_csv('data/classificationForMap.csv', sep = ';', index_col = 0)
 
 # Add Data to GeoJSON
 for feature in geoBarrios['features']:
@@ -45,7 +50,7 @@ for feature in geoBarrios['features']:
         raise UserWarning(f"No data found for {feature['properties']['nombre']}.")
     
 # Create Linear Colormap Based on Numeric Variable
-numVarNameList = ['dummyValue']
+numVarNameList = ['dummyValue', 'dummyValue2']
 
 # Create a base map
 myMap = folium.Map(
@@ -119,14 +124,11 @@ groupTipoClass['None'] = folium.FeatureGroup('None').add_to(myMap)
 for classificationName in distritosTC.columns:
     groupTipoClass[classificationName] = folium.FeatureGroup(classificationName).add_to(myMap)
     for feature in geoDistritos['features']:
-        # Extractt text
+        # Extract Class
         tag = distritosTC[classificationName].loc[distritosTC.index.str.lower().values == feature['properties']['nombre'].lower()].values[0]
         folium.Marker(
             location = [feature['properties']['geo_point_2d']['lat'], feature['properties']['geo_point_2d']['lon']],
-            icon = DivIcon(
-                icon_size = (150, 36),
-                icon_anchor = (7, 20),
-                html = f'<div style="font-size: 8pt; color : black">{tag}</div>')
+            icon = CustomIcon(f'icons/{iconMapper[tag]}', icon_size = (40, 40))
         ).add_to(groupTipoClass[classificationName])
 
 # Add Layer Control

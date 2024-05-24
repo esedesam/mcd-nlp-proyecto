@@ -1,0 +1,20 @@
+;BoW;TF-IDF;TF-IDF N-gram(1,3);doc2vec;facebook/bart-large-mnli;MoritzLaurer/mDeBERTa-v3-base-xnli-multilingual-nli-2mil7;Recognai/bert-base-spanish-wwm-cased-xnli
+Ciutat Vella;histórico;histórico;histórico;histórico;histórico;turístico;multicultural
+L'Eixample;comercial;turístico;turístico;histórico;comercial;comercial;multicultural
+Extramurs;turístico;turístico;multicultural;histórico;multicultural;comercial;turístico
+Campanar;familiar;comercial;comercial;histórico;comercial;comercial;multicultural
+La Saidia;turístico;comercial;comercial;histórico;familiar;familiar;multicultural
+El Pla del Real;familiar;familiar;familiar;histórico;histórico;comercial;multicultural
+L'Olivereta;comercial;comercial;comercial;histórico;turístico;multicultural;multicultural
+Patraix;familiar;familiar;familiar;histórico;multicultural;comercial;familiar
+Jesus;turístico;turístico;turístico;histórico;multicultural;comercial;familiar
+Quatre Carreres;familiar;familiar;familiar;histórico;comercial;comercial;familiar
+Poblats Maritims;turístico;turístico;turístico;histórico;turístico;comercial;multicultural
+Camins al Grau;familiar;multicultural;multicultural;histórico;familiar;comercial;multicultural
+Algiros;familiar;familiar;familiar;histórico;multicultural;multicultural;multicultural
+Benimaclet;turístico;turístico;turístico;histórico;multicultural;histórico;familiar
+Rascanya;comercial;familiar;comercial;histórico;comercial;comercial;multicultural
+Benicalap;familiar;familiar;familiar;histórico;familiar;familiar;multicultural
+POBLATS DE L'OEST;familiar;familiar;familiar;histórico;multicultural;comercial;multicultural
+POBLATS DEL NORD;histórico;histórico;histórico;histórico;familiar;familiar;multicultural
+POBLATS DEL SUD;familiar;familiar;familiar;histórico;familiar;familiar;multicultural
