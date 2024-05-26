@@ -30,6 +30,10 @@ dataDf = pd.read_csv('data/df_variables_importantes.csv', sep = ',')
 distritoColName = 'Distrito'
 dataVarName = dataDf.columns[dataDf.columns != distritoColName]
 
+# Create Linear Colormap Based on Numeric Variable
+numVarNameList = ['Extranjeros']
+
+# Load Classification Results
 distritosTC = pd.read_csv('data/classificationForMap.csv', sep = ';', index_col = 0)
 
 # Add Data to GeoJSON
@@ -41,15 +45,12 @@ for feature in geoDistritos['features']:
             newValue = dataDf.loc[idx, varName]
             # Convert to Python Native Types for JavaScript Compatiblity
             if isinstance(newValue, np.int_):
-                newValue = int(newValue)
+                newValueStr = f'{int(newValue):d}'
             elif isinstance(newValue, np.generic):
-                newValue = float(newValue)
-            feature['properties'][varName] = int(dataDf.loc[idx, varName])
+                newValueStr = f'{float(newValue):.2f}'
+            feature['properties'][varName] = newValueStr
     else:
         raise UserWarning(f"No data found for {feature['properties']['nombre']}.")
-    
-# Create Linear Colormap Based on Numeric Variable
-numVarNameList = ['Extranjeros']
 
 # Create a base map
 myMap = folium.Map(
