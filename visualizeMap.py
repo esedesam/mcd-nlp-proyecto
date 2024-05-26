@@ -1,7 +1,7 @@
 import folium
 import json
-import folium.plugins
-from folium.features import CustomIcon
+from folium.plugins import GroupedLayerControl, FloatImage
+from folium.features import CustomIcon, DivIcon
 import numpy as np
 import pandas as pd
 from branca.colormap import linear
@@ -21,36 +21,36 @@ with open('data/colorMappingBarrios.json') as f:
 with open('data/colorMappingDistritos.json') as f:
     colorMappingDistritos = json.load(f)
 
-# Load Icon Mappings
+# Load Icon Mapping
 with open('icons/classIcons.json', encoding = 'utf-8') as f:
     iconMapper = json.load(f)
 
 # Load Data to Show
-dataDf = pd.read_csv('data/dummyData.csv', sep = ',')
-barrioColName = 'barrio'
-dataVarName = dataDf.columns[dataDf.columns != barrioColName]
+dataDf = pd.read_csv('data/df_variables_importantes.csv', sep = ',')
+distritoColName = 'Distrito'
+dataVarName = dataDf.columns[dataDf.columns != distritoColName]
 
+# Create Linear Colormap Based on Numeric Variable
+numVarNameList = ['Extranjeros']
+
+# Load Classification Results
 distritosTC = pd.read_csv('data/classificationForMap.csv', sep = ';', index_col = 0)
 
 # Add Data to GeoJSON
-for feature in geoBarrios['features']:
-    idx = np.where(dataDf[barrioColName] == feature['properties']['nombre'])[0]
+for feature in geoDistritos['features']:
+    idx = np.where(dataDf[distritoColName].str.lower().values == feature['properties']['nombre'].lower())[0]
     if idx.size > 0:
         idx = idx[0]
         for varName in dataVarName:
             newValue = dataDf.loc[idx, varName]
             # Convert to Python Native Types for JavaScript Compatiblity
             if isinstance(newValue, np.int_):
-                newValue = int(newValue)
+                newValueStr = f'{int(newValue):d}'
             elif isinstance(newValue, np.generic):
-                newValue = float(newValue)
-            feature['properties'][varName] = int(dataDf.loc[idx, varName])
+                newValueStr = f'{float(newValue):.2f}'
+            feature['properties'][varName] = newValueStr
     else:
-        feature['properties'][varName] = None
         raise UserWarning(f"No data found for {feature['properties']['nombre']}.")
-    
-# Create Linear Colormap Based on Numeric Variable
-numVarNameList = ['dummyValue', 'dummyValue2']
 
 # Create a base map
 myMap = folium.Map(
@@ -60,8 +60,6 @@ myMap = folium.Map(
 
 # Add Barrios de Valencia to the map
 groupBarrios = folium.FeatureGroup('Barrios de Valencia').add_to(myMap)
-popupField = ['nombre']
-popupField.extend(dataVarName.tolist())
 folium.GeoJson(
     geoBarrios,
     style_function = lambda feature: {
@@ -72,7 +70,7 @@ folium.GeoJson(
     },
     zoom_on_click = True,
     tooltip = folium.GeoJsonTooltip(fields = ['nombre'], labels = False),
-    popup = folium.GeoJsonPopup(fields = popupField, localize = False)
+    popup = folium.GeoJsonPopup(fields = ['nombre'], localize = False)
 ).add_to(groupBarrios)
 
 # Add Distritos de Valencia to the map
@@ -87,7 +85,7 @@ folium.GeoJson(
     },
     zoom_on_click = True,
     tooltip = folium.GeoJsonTooltip(fields = ['nombre'], labels = False),
-    popup = folium.GeoJsonPopup(fields = ['nombre'], localize = False)
+    popup = folium.GeoJsonPopup(fields = ['nombre'] + dataVarName.tolist(), localize = False)
 ).add_to(groupDistritos)
 
 # Add Color-Codified Numeric Variable
@@ -96,14 +94,15 @@ for numVarName in numVarNameList:
     # Colormap
     colormap = linear.YlGn_09.scale(
         dataDf[numVarName].min(), dataDf[numVarName].max())
-    colormapDict = dataDf.set_index(barrioColName)[numVarName]
+    colormapDict = dataDf.set_index(distritoColName)[numVarName]
+    colormapDict.index = colormapDict.index.str.lower()
 
     # Map Layer
     groupNumVar[numVarName] = folium.FeatureGroup(numVarName).add_to(myMap)
     folium.GeoJson(
-        geoBarrios,
+        geoDistritos,
         style_function = lambda feature: {
-            'fillColor': colormap(colormapDict[feature['properties']['nombre']]),
+            'fillColor': colormap(colormapDict[feature['properties']['nombre'].lower()]),
             'color': 'black',
             'weight': 1,
             'dashArray': '5, 5',
@@ -128,12 +127,12 @@ for classificationName in distritosTC.columns:
         tag = distritosTC[classificationName].loc[distritosTC.index.str.lower().values == feature['properties']['nombre'].lower()].values[0]
         folium.Marker(
             location = [feature['properties']['geo_point_2d']['lat'], feature['properties']['geo_point_2d']['lon']],
-            icon = CustomIcon(f'icons/{iconMapper[tag]}', icon_size = (40, 40))
+            icon = CustomIcon(f'icons/{iconMapper[tag]}', icon_size = (40, 40)),
+            tooltip = tag
         ).add_to(groupTipoClass[classificationName])
 
 # Add Layer Control
-# folium.LayerControl().add_to(myMap)
-folium.plugins.GroupedLayerControl(
+GroupedLayerControl(
     groups = {'Capas': [groupDistritos, groupBarrios] + list(groupNumVar.values()), 'Clasificaciones': list(groupTipoClass.values())},
     collapsed = True,
 ).add_to(myMap)
