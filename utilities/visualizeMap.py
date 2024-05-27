@@ -8,17 +8,17 @@ from branca.colormap import linear
 import base64
 
 # Load Barrios GeoJSON (https://valencia.opendatasoft.com/explore/dataset/barris-barrios/export/)
-with open('data/barris-barrios.geojson') as f:
+with open('/../data/barris-barrios.geojson') as f:
     geoBarrios = json.load(f)
 
 # Load Distritos GeoJSON (https://valencia.opendatasoft.com/explore/dataset/districtes-distritos/export/)
-with open('data/districtes-distritos.geojson') as f:
+with open('/../data/districtes-distritos.geojson') as f:
     geoDistritos = json.load(f)
 
 # Load Color Mappings
-with open('data/colorMappingBarrios.json') as f:
+with open('/../data/colorMappingBarrios.json') as f:
     colorMappingBarrios = json.load(f)
-with open('data/colorMappingDistritos.json') as f:
+with open('/../data/colorMappingDistritos.json') as f:
     colorMappingDistritos = json.load(f)
 
 # Load Icon Mapping
@@ -26,7 +26,7 @@ with open('icons/classIcons.json', encoding = 'utf-8') as f:
     iconMapper = json.load(f)
 
 # Load Data to Show
-dataDf = pd.read_csv('data/df_variables_importantes.csv', sep = ',')
+dataDf = pd.read_csv('/../data/df_variables_importantes.csv', sep = ',')
 distritoColName = 'Distrito'
 dataVarName = dataDf.columns[dataDf.columns != distritoColName]
 
@@ -34,7 +34,7 @@ dataVarName = dataDf.columns[dataDf.columns != distritoColName]
 numVarNameList = ['Extranjeros']
 
 # Load Classification Results
-distritosTC = pd.read_csv('data/classificationForMap.csv', sep = ';', index_col = 0)
+distritosTC = pd.read_csv('/../data/classificationForMap.csv', sep = ';', index_col = 0)
 
 # Add Data to GeoJSON
 for feature in geoDistritos['features']:

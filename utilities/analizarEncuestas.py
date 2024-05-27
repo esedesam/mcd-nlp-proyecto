@@ -40,7 +40,7 @@ df = df[(df['Marca temporal'] >= todayStart) & (df['Marca temporal'] <= cutoffTi
 df.drop(columns = ['Marca temporal'], inplace = True)
 
 # Añadir resultados del modelo
-modelResultsPath = 'data/distritosClasificacionDef.csv'
+modelResultsPath = '/../data/distritosClasificacionDef.csv'
 aux = pd.read_csv(modelResultsPath, sep = ';', index_col = 0)
 auxRow = aux.iloc[0]
 aux_data = {'Nombre': 'Model Groundtruth'}

@@ -10,8 +10,8 @@ url = "http://localhost:11434/api/generate"
 headers = {"Content-Type": "application/json"}
 
 # Cargar datos
-df = pd.read_csv('data/Distritos_v3.csv')
-with open('data/tipologyDescription.json', 'r', encoding = 'utf-8') as f:
+df = pd.read_csv('/../data/Distritos_v3.csv')
+with open('/../data/tipologyDescription.json', 'r', encoding = 'utf-8') as f:
     tipology = json.load(f)
 
 # Llamar al modelo
