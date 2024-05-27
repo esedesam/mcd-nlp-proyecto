@@ -71,7 +71,7 @@ scores_df.sort_values(by = 'accuracy', ascending = False, inplace = True)
 
 # Representar ganadores
 colors = ['#FFD700', '#C0C0C0', '#CD7F32'] + ['skyblue'] * (len(scores_df) - 3)
-ax = scores_df['accuracy'].plot(kind = 'bar', figsize = (10, 6), color = colors)
+ax = scores_df['accuracy'].plot(kind = 'bar', figsize = (12, 8), color = colors)
 ax.set_ylabel('Accuracy')
 
 plt.show()
